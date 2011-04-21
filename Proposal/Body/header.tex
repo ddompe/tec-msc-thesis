@@ -1,0 +1,28 @@
+% Language support
+\usepackage[english,spanish]{babel}
+
+% Generate pretty PDF with links on the TOC
+\usepackage[pdftex]{graphicx}
+\usepackage{setspace}
+\usepackage{mdwlist}
+\usepackage{alltt}
+\usepackage[dvips, bookmarks, colorlinks=true, pdftitle={}, pdfauthor={Diego Dompe}, pdfsubject={}, pdfkeywords={thesis, gstreamer, texas instruments, ridgerun, dsp, plugin},
+linkcolor=blue,filecolor=blue,urlcolor=blue]{hyperref}
+
+% Define abstract environment since it doesn't exists on book class
+\usepackage{fancyhdr}
+\pagestyle{empty}
+\newenvironment{abstract}%
+{ \begin{center}%
+\bfseries \abstractname \end{center}}
+{\vfill\null}
+
+% Comment this out when is not a draft
+\usepackage{draftwatermark}
+\SetWatermarkLightness{0.95}
+\SetWatermarkFontSize{5cm}
+\SetWatermarkScale{5}
+\SetWatermarkText{DRAFT}
+
+% Custom commands
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}}

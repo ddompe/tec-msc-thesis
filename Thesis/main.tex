@@ -1,0 +1,32 @@
+% For tips on writing the thesis, see http://www.tug.org/pracjourn/2008-1/mori/mori.pdf
+
+% Two side to save paper
+% openrigth means to put the chapter tittle on the right pages 
+\documentclass[12pt,twosides,letterpaper,openright]{book}
+
+% Custom-commands and definitions
+%\input{Body/header.tex}
+
+\begin{document}
+% This is the first part of the document (frontmatter), use Roman numeration
+\frontmatter
+
+%\input{Body/cover.tex}
+
+%\input{Body/abstract.tex}
+
+\tableofcontents
+
+\listoffigures
+
+\mainmatter
+
+%\input{Body/chapter1.tex}
+%\input{Body/chapter2.tex}
+%\input{Body/chapter3.tex}
+
+\backmatter
+\bibliographystyle{plain} 
+\bibliography{../Common/references.bib}
+
+\end{document}
