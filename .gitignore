@@ -1,4 +1,6 @@
 *.toc
 *.lof
+*.log
+*.synctex.gz
 *.out
 *.aux
