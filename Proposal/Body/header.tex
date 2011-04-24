@@ -22,14 +22,14 @@
 % Generate fancy chapter titles
 \usepackage[Bjarne]{fncychap}
 
+%Use Fancy headers
+\usepackage{fancyhdr}
+
 % Generate pretty PDF with links on the TOC
 \usepackage{mdwlist}
 \usepackage{alltt}
 \usepackage[dvips, bookmarks, colorlinks=true, pdftitle={\thesistitle}, pdfauthor={\pdfauthor}, pdfsubject={\thesistitle}, pdfkeywords={\thesiskeywords},
 linkcolor=blue,filecolor=blue,urlcolor=blue]{hyperref}
-
-%Use Fancy headers
-\usepackage{fancyhdr}
 
 % Allow epigraphs at the beginning of chapters
 \usepackage{epigraph}
@@ -44,12 +44,15 @@ linkcolor=blue,filecolor=blue,urlcolor=blue]{hyperref}
 \usepackage{nomencl}
 \makenomenclature
 
+% Generation of acronyms
+\usepackage{acronym}
+
 % Comment this out when is not a draft
-%\usepackage{draftwatermark}
-%\SetWatermarkLightness{0.95}
-%\SetWatermarkFontSize{5cm}
-%\SetWatermarkScale{5}
-%\SetWatermarkText{DRAFT}
+\usepackage{draftwatermark}
+\SetWatermarkLightness{0.95}
+\SetWatermarkFontSize{5cm}
+\SetWatermarkScale{5}
+\SetWatermarkText{DRAFT}
 
 % Custom commands
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}

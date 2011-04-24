@@ -11,4 +11,7 @@
 *.ilg
 *.maf
 *.mtc*
+*.bbl
+*.blg
+
 

@@ -29,7 +29,8 @@
 \tableofcontents
 \listoffigures
 \listoftables
-\printnomenclature
+% Table of Symbols and Nomenclature
+%\printnomenclature
 
 \mainmatter
 % Use double space
@@ -39,15 +40,25 @@
 % Left the right header clean
 \rhead{}
 
-\input{Body/chapter1.tex}
-\input{Body/chapter2.tex}
-\input{Body/chapter3.tex}
+\input{Body/chapter1}
+\input{Body/chapter2}
+\input{Body/chapter3}
+
+% Appendixes
+%\appendix 
+%\input{Body/appendix1}
+
+% Final pages
+\backmatter
 
 % Use single space
 \singlespacing
 
-\backmatter
-\bibliographystyle{plain} 
+% Bibliography
+\cleardoublepage\bibliographystyle{plain}\refstepcounter{chapter}\addcontentsline{toc}{chapter}{\bibname}
 \bibliography{../Common/references.bib}
+
+% Acronyms
+\input{Body/acronyms.tex}
 
 \end{document}
