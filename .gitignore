@@ -9,4 +9,6 @@
 *.nls
 *.nlo
 *.ilg
+*.maf
+*.mtc*
 
