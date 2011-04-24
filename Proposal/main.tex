@@ -2,28 +2,49 @@
 
 % Two side to save paper
 % openrigth means to put the chapter tittle on the right pages 
-\documentclass[12pt,twosides,letterpaper,openright]{book}
+\documentclass[12pt,letterpaper,twoside,openright]{book}
+
+% We define some strings that will use along
+\def \thesiskeywords {Thesis, DSP, SoC}
+\def \pdfauthor {Diego Dompe}
+\def \thesistitle {Software Architecture to Integrate Hardware Accelerated Algorithms on GStreamer for Embedded Systems}
+%A framework for integrating hardware accelerated multimedia algorithms on Texas Instruments ``System On Chip" with GStreamer
 
 % Custom-commands and definitions
+% See this file for defining the keywords that will show up on the pdf file
 \input{Body/header.tex}
 
 \begin{document}
+
 % This is the first part of the document (frontmatter), use Roman numeration
 \frontmatter
+
+% Simple style
+\pagestyle{empty}
 
 \input{Body/cover.tex}
 
 \input{Body/abstract.tex}
 
 \tableofcontents
-
 \listoffigures
+\listoftables
+\printnomenclature
 
 \mainmatter
+% Use double space
+\doublespacing
+% Now fancy style
+\pagestyle{fancy}
+% Left the right header clean
+\rhead{}
 
 \input{Body/chapter1.tex}
 \input{Body/chapter2.tex}
 \input{Body/chapter3.tex}
+
+% Use single space
+\singlespacing
 
 \backmatter
 \bibliographystyle{plain} 

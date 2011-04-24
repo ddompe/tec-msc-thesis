@@ -1,6 +1,12 @@
 *.toc
 *.lof
 *.log
+*.lot
 *.synctex.gz
 *.out
 *.aux
+.DS_Store
+*.nls
+*.nlo
+*.ilg
+

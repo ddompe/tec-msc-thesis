@@ -1,28 +1,57 @@
 % Language support
 \usepackage[english,spanish]{babel}
 
-% Generate pretty PDF with links on the TOC
-\usepackage[pdftex]{graphicx}
+%For spanish we need indentation on the first line
+%\usepackage{indentfirst}
+
+% Prevent latex from expanding to fill page
+\raggedbottom
+
+%Use the margins requested
+\usepackage[hmargin={3.5cm,2.5cm},vmargin=2.5cm]{geometry}
+
+% To define spacing
 \usepackage{setspace}
+
+% We use these packages for making the nice logo on the title page
+\usepackage[pdftex]{graphicx}
+\usepackage{eso-pic}
+\usepackage{tikz}
+
+% Use input characters instead of scape codes
+\usepackage[utf8x]{inputenc}
+
+% Generate fancy chapter titles
+\usepackage[Lenny]{fncychap}
+
+% Generate pretty PDF with links on the TOC
 \usepackage{mdwlist}
 \usepackage{alltt}
-\usepackage[dvips, bookmarks, colorlinks=true, pdftitle={}, pdfauthor={Diego Dompe}, pdfsubject={}, pdfkeywords={thesis, gstreamer, texas instruments, ridgerun, dsp, plugin},
+\usepackage[dvips, bookmarks, colorlinks=true, pdftitle={\thesistitle}, pdfauthor={\pdfauthor}, pdfsubject={\thesistitle}, pdfkeywords={\thesiskeywords},
 linkcolor=blue,filecolor=blue,urlcolor=blue]{hyperref}
 
-% Define abstract environment since it doesn't exists on book class
+%Use Fancy headers
 \usepackage{fancyhdr}
-\pagestyle{empty}
+
+% Allow epigraphs at the beginning of chapters
+\usepackage{epigraph}
+
+% Define abstract environment since it doesn't exists on book class
 \newenvironment{abstract}%
-{ \begin{center}%
+{\cleardoublepage\null \vfill \begin{center}%
 \bfseries \abstractname \end{center}}
 {\vfill\null}
 
+% Generation of nomenclature
+\usepackage{nomencl}
+\makenomenclature
+
 % Comment this out when is not a draft
-\usepackage{draftwatermark}
-\SetWatermarkLightness{0.95}
-\SetWatermarkFontSize{5cm}
-\SetWatermarkScale{5}
-\SetWatermarkText{DRAFT}
+%\usepackage{draftwatermark}
+%\SetWatermarkLightness{0.95}
+%\SetWatermarkFontSize{5cm}
+%\SetWatermarkScale{5}
+%\SetWatermarkText{DRAFT}
 
 % Custom commands
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}
