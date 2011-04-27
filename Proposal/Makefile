@@ -3,20 +3,19 @@ DELETE =  *.aux *.log *.ps *.dvi *.bbl *.blg *~ $(DOCUMENT) *.brf *.idx *.ilg *.
 
 # For Mac with texlive
 PDFTEX=/usr/local/texlive/2009/bin/universal-darwin/pdflatex
-MAKEINDEX=/usr/local/texlive/2009/bin/universal-darwin/makeindex 
-MAKEINDEXSTYLE=/usr/local/texlive/2009//texmf-dist/makeindex/nomencl/nomencl.ist
+BIBTEX=/usr/local/texlive/2009/bin/universal-darwin/bibtex
 
 all: $(DOCUMENT)
 
-$(DOCUMENT): main.tex main.nls Body/*.tex
-	@$(PDFTEX) main.tex
-	@mv main.pdf $(DOCUMENT)
+$(DOCUMENT): main.tex main.bbl Body/*.tex
+	$(PDFTEX) main.tex
+	mv main.pdf $(DOCUMENT)
 
-main.nls: main.nlo
-	@$(MAKEINDEX) -s $(MAKEINDEXSTYLE) $< -o $@
+main.bbl: main.aux
+	$(BIBTEX) $<
 
-main.nlo: main.tex Body/*.tex
-	@$(PDFTEX) main.tex
+main.aux: main.tex Body/*.tex
+	$(PDFTEX) main.tex
 
 clean:
 	rm -f $(DELETE)
