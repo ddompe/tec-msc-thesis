@@ -1,44 +1,85 @@
 \chapter{Introduction and background}
-%\epigraph{⟨text⟩}{⟨source⟩}
+\epigraph{Embedded programmers don't design software, they just hack it until it works}{Some kernel developer TODO: find actual quote}
 
 \section{Introduction}
-Should be 1-2 pages
-write it so it captures the reader's interest in this overview. It does not have to be perfect.
-You can write this section last. Your best overview of you project most likely will come after you have written the other sections of your proposal.
+
 
 \section{Background}
-Key ideas
+Embedded Systems are one of the fastest growing markets in the computer industry (TODO: find statistics). Some report from XXX year says that X many processors shipped yearly are for embedded systems (TODO).
 
-Embedded Systems are everywere
+Embedded Software development is a discipline that is younger that software development for other environments like \acp{PC} or Mainframes. There are some particular issues that turn embedded software development into a complex eco-system:
+\begin{itemize*}
+\item It usually requires some level of integration with the hardware that is non common in other software development areas.
+\item Many of the hardware integration that is done is very particular and unique, which usually makes the code hard to re-use.
+\item The market for embedded system is so fast-paced that developers are in pressure to deliver working devices as soon as possible. Few companies care about the quality or re-usability of the code they use. TODO: find some studies about code-reuse or open source contributions in embedded space.
+\item Given the hardware integration requirements and the emergence of the field, many embedded developers may lack formal training on software development, but instead have an \ac{EE} background.
+\end{itemize*}
 
-Embedded Systems change quickly and evolve faster than previous technologies, thanks to technologies like \ac{SoC}, which revolutionize the way the technology industry works\cite{Somaya:2000fk}. For example on \acp{DSP}
+These factors usually means that embedded developers will not likely find or apply the same best-practices that the rest of the software industry use. Is not rare to find embedded projects where each revision of the same product will have a complete new software stack or re-implementation from the previous iteration (TODO: find a cite or how to justify from my own experience), given the previous code pieces are so tailored to the hardware that can't be reused easily.
 
-Tradeoff between custom hardware vrs software. \acp{DSP} are good solution (why?). Advantage of heterogenous mixed environments on the operating system level.
+The fact that the code is tailored for specific hardware to the point where it can't be easily re-used goes against \acp{OS} theory which proposes that the \ac{OS} should abstract all the software from the hardware implementation. However many embedded devices may use a custom-made \ac{OS} or use no \ac{OS} at all (also called \ac{OS}-less solutions).
 
-Software complexity for DSP programming on heterogenous architecture. Hardware complexity interfering with the software.
+Linux™ has gradually gained acceptance as an \ac{OS} for embedded systems due his open-source nature and support from embedded processors manufacturers, especially on the \ac{SoC} market. \acp{SoC} are the main trend for new product development in recent years due the benefits it brings to new chip development \cite{Somaya:2000fk}.
 
-Software re-use for the ARM side with a framework like gstreamer.
+The advantages that Linux provides for new embedded product development are clear:
+\begin{itemize*}
+\item It's a probed \ac{OS} which has previously used successfully in different embedded markets.
+\item No royalty fees or licenses cost associated with it directly.
+\item Wide knowledge-based available and many developers are familiarized with it.
+\item Many hardware developers for peripherals provide drivers and support for Linux, simplifying the integration of hardware components. This is a critical element for minimizing the time to market of a product.
+\end{itemize*}
 
-Get into details for the target platforms. Mention at least the platforms where the accelerators are not general propose \acp{DSP}.
+However Linux also presents some disadvantages for the embedded space:
+\begin{itemize*}
+\item It's not designed to be a \ac{RTOS}, which make it not suitable for all type of embedded applications.
+\item There is a learning curve for \ac{RTOS} developers, since Linux enforces some concepts that may be foreign to them:
+	\begin{itemize*}
+	\item Memory space protection: most \ac{RTOS} do not provide memory space protection.
+	\item Separation between the kernel and user space applications: This is a side-effect of the memory space protection.
+	\end{itemize*}
+\item There are several algorithms used in non-\acp{RTOS} like Linux that may affect the performance compared to \acp{RTOS} or \ac{OS}-less solutions:
+	\begin{itemize*}
+	\item Context Switches: there is a penalty associated on several hardware architectures with the memory protection.
+	\item I/O Scheduling: the kernel page cache may defer I/O work. Linux offers full control to customized this behaviors for embedded systems, but many developers may be unaware of them.
+	\item Interrupts prioritization: mainline Linux kernel doesn't offer a way to control priorities for interrupt handlers. There are patches to transform interrupt handlers into processes, but they aren't available for all kernel versions.
+	\end{itemize*}
+\end{itemize*}
 
+Despite the short-comings that Linux present versus a \ac{RTOS}, just the fact of have widely available drivers and software stacks for peripherals on the embedded space outweighs these problems. Many \acp{SoC} may require complex software stacks to interact with integrated peripherals, such is the case of heterogenous \acp{SoC} using a \ac{GPP} and a \ac{DSP} or other sort of hardware unit for accelerating specific operations (such as video decoding, cryptographic algorithms, etc). Implementing or porting the functionality of these software stacks required to interact with the desired peripheral to an \ac{OS}-less or other non-supported \ac{RTOS} is usually non effective in terms of cost or time.
+
+However many developers that are un-familiar with Linux and/or general purpose \acp{OS} design, approach the task of implementing the functionality for their embedded products bypassing Linux functionality. For example the author of this work have found several times kernel drivers for Linux designed just to specifically allow user-space access to the peripherals by any user space application in commercial \ac{OEM} offerings for embedded development.  There are several reasons for developers using this kind of approach:
+\begin{itemize*}
+\item Some times the software stack was designed in \ac{OS}-less environment and ported over to Linux. Developers just try to find a way to get the Linux hardware management out of the way of the software stack.
+\item Developers are simple un-familiar with Linux design.
+\item Linux may lack APIs or functionality to handle new scenarios posted by the hardware design. For example ability to realize zero-memory-copy operations.
+\item Developers try to use Linux's APIs but found that performance was un-acceptable for unknown reasons. They just assumed that is a problem with Linux being bloated for desktop systems.
+\end{itemize*}
+
+One common believe in the embedded community is that any software design highly specialized will provide better performance than a implementing it over a generic solution. One example of this is multimedia software architectures on top of Linux, where the amount of data being processed requires to use data paths with zero memory copy operations across the whole software stack.
+ 
 \section{Problem statement}
-Integrating custom DSP algorithms on higher-level frameworks in order to gain time-to-market is a difficult tasks and requires detailed knowledge of the intrinsics of the platform to get it right. Not all the knowledge about the challenges of integration are documented or measured.
+Embedded developers tend to create software designs and architectures that aren't re-usable or maintainable under the premise that generic software architectures penalize performance. The particular example this work will focus on is multimedia software stacks due the high amount of data that it moves around the system and the soft real-time requirements of handling audio and video streams.
+
+\section{Hypothesis}
+It it's possible to optimize embedded Linux multimedia software stacks to provide good performance with negligible penalty compared to custom \ac{OS}-less multimedia solutions, if architecture-specific optimizations are made on the Linux kernel and applications configuration.
 
 \section{Previous work}
-
 \subsection{Literature review}
-Locate and briefly describe those studies and theories that support and oppose your approach to the problem. In other words, place the proposed study in context through a critical analysis of selected research reports.
-Be sure to include alternative methodological approaches that have been used by others who studied your problem.
+It wasn't possible to find existing literature on the specific subject of this work, however we found related literature that may apply.
 
-\subsection{Previous solutions}
-Describe previous attempts and similar solutions:
-- gst-ti plugin
-- gst-ti 2.x plugin
-- gst-openmax
-- gst-ducati
+Liedtke \cite{Liedtke:1995kx} proved with his work that using the right algorithms and analysis it is possible to implement software stacks that manage hardware access with minimal performance penalties. He faced common belief that $\mu$-kernels suffer inherit design performance penalties and demonstrated that rather than a design issue it was an implementation issue the root cause of the performance problems. Liedtke also showed that architecture-specific optimizations were required without loosing generality in the software architecture design.
 
-\section{Purpose}
-The purpose of this study is to create a software architecture to integrate existing and new DSP algorithms into the higher level multimedia framework. This framework should be efficient from the perspective of hardware constrains and leverage existing knowledge from previous experiences.
+If we characterize the main differences between Linux and \acp{RTOS} or \ac{OS}-less solutions, we can identify previous work that addresses the performance and optimizations for these areas in embedded processors.
+
+\subsubsection{Memory Protection and Context Switching}
+
+Some paper found here: TODO \cite{Chanteperdrix:2009fk}), instrumented performance penalties associated with context-switching in ARM processor architecture.
+
+\subsubsection{I/O Handling}
+TODO
+
+\subsubsection{Process Scheduling}
+TODO
 
 \section{Long-Range Consequences}
-Will improve time to market for products based on the platforms supported by the target framework. It will provide reference code for optimized software architecture for resource-constrained systems.
+This work will provide a foundation for analysis of the factors involved on adapting the Linux kernel for his use on embedded systems dealing with multimedia software stacks.
