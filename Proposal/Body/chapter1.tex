@@ -10,23 +10,23 @@ Embedded Systems are one of the fastest growing markets in the computer industry
 Embedded Software development is a discipline that is younger that software development for other environments like \acp{PC} or Mainframes. There are some particular issues that transform embedded software development into a complex eco-system:
 \begin{itemize*}
 \item It usually requires some level of integration with the hardware that is non-common in other software development areas.
-\item Many of the hardware integration that is done is very particular and unique, which usually makes the code hard to re-use if isn't designed properly (or if the technology is new and isn't clear how to make implement a software solution in a generic way).
-\item The market for embedded system is so fast-paced that developers are in pressure to deliver working devices as soon as possible. Few companies care about the quality or re-usability of their embedded code, except by hardware vendors or efforts from single open-source minded developers who want to contribute back. For example recent articles regarding status of the contributions to the Linux™ kernel for the ARM architecture are described as a ``mess'' due many of different interests and forces behind it \cite{Proffitt:2011fk}.
-\item Given the hardware integration requirements and the emergence of the field, many embedded developers may lack formal training on software development, but instead have an \ac{EE} background.
+\item Many of the hardware integration that is done is very particular and unique, which usually makes the code hard to re-use if isn't designed properly (or if the technology is new and isn't clear how to implement the software solution in a generic way).
+\item The market for embedded system is so fast-paced that developers are in pressure to deliver working devices as soon as possible. Few companies care about the quality or re-usability of their embedded code, except by hardware vendors or efforts from single open-source minded developers who want to contribute back. For example recent articles regarding status of the contributions to the Linux™ kernel for the ARM architecture the contributions status as a  ``mess'' due many of the different interests and agendas behind it \cite{Proffitt:2011fk}.
+\item Many embedded developers may lack formal training on software development, but instead have an \ac{EE} background.
 \end{itemize*}
 
 These factors usually means that embedded developers will not likely find or apply the same best-practices that the rest of the software industry use. Is not rare to find embedded projects where each revision of the same product will have a complete new software stack or re-implementation from the previous iteration.
 
 The fact that the code is tailored for specific hardware to the point where it can't be easily re-used goes against \acp{OS} theory which proposes that the \ac{OS} should abstract all the software from the hardware implementation \citep[p.~29]{Silberschatz:2010vn}. However many embedded devices (especially ones with low memory footprint) may use a custom-made \ac{OS} or use no \ac{OS} at all (also called an \ac{OS}-less solutions).
 
-Linux has gradually gained acceptance as an \ac{OS} for embedded systems due his open-source nature and support from embedded processors manufacturers, especially on the \ac{SoC} market. \acp{SoC} are the main trend for new product development in recent years due the benefits it brings to new chip development \citep{Somaya:2000fk}.
+On embedded systems capable enough to support it, Linux has gradually gained acceptance as an \ac{OS} for embedded systems due his open-source nature and support from embedded processors manufacturers, especially on the \ac{SoC} market. \acp{SoC} are the main trend for new product development in recent years due the benefits it brings to new chip development \citep{Somaya:2000fk}.
 
 The advantages that Linux provides for new embedded product development are clear:
 \begin{itemize*}
 \item It's a probed \ac{OS} which has been successfully used in different embedded markets.
 \item No royalty fees or licenses cost associated directly with it (although some embedded vendors may add royalty fees if you use their custom distributions).
 \item Wide knowledge base available and many developers are familiarized with it.
-\item Many hardware developers for peripherals provide drivers and support for Linux, simplifying the integration of hardware components. This is a critical element for minimizing the time to market of a product.
+\item Usually hardware companies provide drivers and support for Linux in their latest devices (for example ethernet or wireless circuits, storage devices, etc.), simplifying the integration of hardware components for an embedded system. This is a critical element for minimizing the time-to-market of a product.
 \end{itemize*}
 
 However Linux also presents some disadvantages for the embedded space:
@@ -41,45 +41,77 @@ However Linux also presents some disadvantages for the embedded space:
 	\begin{itemize*}
 	\item Context Switches: there is a penalty associated on several hardware architectures with the memory protection.
 	\item I/O Scheduling: the kernel page cache may defer I/O work. Linux offers full control to customized this behaviors for embedded systems, but many developers may be unaware of them.
-	\item Interrupts prioritization: mainline Linux kernel doesn't offer a way to control priorities for interrupt handlers. There are patches to transform interrupt handlers into processes, but they aren't available for all kernel versions.
+	\item Interrupts prioritization: mainline Linux kernel doesn't offer a way to control priorities for interrupt handlers. There are patches to transform interrupt handlers into kernel threads, but they aren't available for all kernel versions and may require specific analysis and tuning to achieve desired results \cite{Song_Chubb_10}.
 	\end{itemize*}
 \end{itemize*}
 
-Despite the short-comings that Linux present versus a \ac{RTOS}, just the fact of have widely available drivers and software stacks for peripherals on the embedded space outweighs these problems. Many \acp{SoC} may require complex software stacks to interact with integrated peripherals, such is the case of heterogenous \acp{SoC} using a \ac{GPP} and a \ac{DSP} or other sort of hardware unit for accelerating specific operations (such as video coding, cryptographic algorithms, etc). Implementing or porting the functionality of these software stacks required to interact with the desired peripheral to an \ac{OS}-less or other non-supported \ac{RTOS} is usually non effective in terms of cost or time.
+Despite the short-comings that Linux present versus a \ac{RTOS}, just the fact of have widely available drivers and software stacks for peripherals on the embedded space usually outweighs these problems. Many \acp{SoC} may require complex software stacks to interact with integrated peripherals, such is the case of heterogenous \acp{SoC} using a \ac{GPP} and a \ac{DSP} or other sort of hardware unit for accelerating specific operations (such as video coding, cryptographic algorithms, etc). Implementing or porting the functionality of these software stacks required to interact with the desired peripheral to an \ac{OS}-less or other non-supported \ac{RTOS} is usually non-effective in terms of cost or time.
 
-However many developers that are un-familiar with Linux and/or general purpose \acp{OS} design, approach the task of implementing the functionality for their embedded products bypassing Linux functionality. For example the author of this work have found several times kernel drivers for Linux designed just to specifically allow user-space access to the peripherals by any user space application in commercial \ac{OEM}/\ac{ODM} offerings for embedded development.  There are several reasons for developers using this kind of approach:
+However many developers that are un-familiar with Linux and/or general purpose \acp{OS} design, approach the task of implementing the functionality for their embedded products bypassing Linux functionality. For example the author of this work have found several times kernel drivers for Linux designed just to specifically allow user-space access to the peripherals by any user space application in commercial \ac{OEM}/\ac{ODM} offerings for embedded development (TODO publish code and put a reference).  There are several reasons for developers using this kind of approach:
 \begin{itemize*}
 \item Some times the software stack was designed in \ac{OS}-less environment and ported over to Linux. Developers just try to find a way to get the Linux hardware management out of the way of the software stack.
 \item Developers are simple un-familiar with Linux design.
 \item Linux may lack APIs or functionality to handle new scenarios posted by the hardware design. For example ability to realize zero-memory-copy operations.
-\item Developers try to use Linux's APIs but found that performance was un-acceptable for unknown reasons. They just assumed that is a problem with Linux being bloated for desktop systems.
+\item Developers try to use Linux's APIs but found that performance was un-acceptable for unknown reasons. In the embedded community is widely believed that general proposes  \acp{OS} Linux may be unsuitable for certain embedded applications since is bloated for desktop systems.
 \end{itemize*}
 
-One common believe in the embedded community is that any software design highly specialized will provide better performance than a implementing it over a generic solution. One example of this is multimedia software architectures on top of Linux, where the amount of data being processed requires to use data paths with zero memory copy operations across the whole software stack.
+Another common believe in the embedded community is that any software design highly specialized will provide better performance than a implementing it over a generic solution. One example of this is multimedia software architectures on top of Linux, where the amount of data being processed requires to use data paths with zero memory copy operations across the whole software stack.
  
 \section{Problem statement}
-Embedded developers tend to create software designs and architectures that aren't re-usable or maintainable under the premise that generic software architectures penalize performance. The particular example this work will focus on is multimedia software stacks due the high amount of data that it moves around the system and the soft real-time requirements of handling audio and video streams.
+Many embedded developers tend to create software designs and architectures that aren't re-usable or maintainable for different reasons; one of them is the empiric premise that generic software architectures penalize performance. Furthermore there are little incentives from the product development cycle for embedded products to invest into optimizing the \acp{OS}. All these factors lead to creation of software platforms that are hard to reuse or leverage into future project versions or other projects, potentially increasing the costs of development.
+
+This work focuses on the particular scenario of multimedia software systems for embedded systems and uses Linux on the ARM architecture.
 
 \section{Hypothesis}
-It it's possible to optimize embedded Linux multimedia software stacks to provide good performance with negligible penalty compared to custom \ac{OS}-less multimedia solutions, if architecture-specific optimizations are made on the Linux kernel, and the software stack is optimized with efficient algorithms.
+It it's possible to optimize general propose \aclp{OS} to provide good performance with negligible penalty compared to custom solutions where not \acl{OS} is used for multimedia software stacks in embedded systems.
 
 \section{Previous work}
 \subsection{Literature review}
+Classic works:
+
+exokernel: \cite{Engler95exokernel:an}
+
+SPIN: \cite{Bershad95extensibility}
+
+YIMA: \cite{Shahabi:2002vn}
+
+
 It wasn't possible to find existing literature on the specific subject of this work, however we found related literature that may apply.
 
 Liedtke \citep{Liedtke:1995kx} proved with his work that using the right algorithms and analysis it is possible to implement software stacks that manage hardware access with minimal performance penalties. He faced common belief that $\mu$-kernels suffer inherit design performance penalties and demonstrated that rather than a design issue it was an implementation issue the root cause of the performance problems. Liedtke also showed that architecture-specific optimizations were required without loosing generality in the software architecture design.
 
 If we characterize the main differences between Linux and \acp{RTOS} or \ac{OS}-less solutions, we can identify previous work that addresses the performance and optimizations for these areas in embedded processors.
 
+\cite{Plagemann2000267} Operating system support for multimedia systems
+
+\cite{Regehr00operatingsystem} Operating System Support for Multimedia: The Programming Model Matters
+
 \subsubsection{Memory Protection and Context Switching}
 
-Some paper found here: TODO \citep{Chanteperdrix:2009fk}), instrumented performance penalties associated with context-switching in ARM processor architecture.
+\citep{Chanteperdrix:2009fk}) implemented FASS
+
+\citep{David:2007:CSO:1281700.1281703}  instrumented performance penalties associated with context-switching in ARM processor architecture.
+
+\cite{Blackham_SH_11} Protected Hard Real Time
 
 \subsubsection{I/O Handling}
-TODO
+\cite{Chu96zero-copytcp}: Zero copy tcp in solaris
+
+Netwokring: \citep{Kim:2002:MCR:646603.697068}
+
+Buffers and algorithms: \cite{Jane98enhancementsto}
+
+Efective IO for RTP: \cite{springerlink:10.1007/s11390-006-0989-5}
+
+\cite{Kim:2002:MCR:646603.697068} A Memory Copy Reduction Scheme for Networked Multimedia Service in Linux Kernel
+
 
 \subsubsection{Process Scheduling}
 TODO
 
+\subsection{Software Stack}
+Performance of Gstreamer: \cite{Contreras:vn} and obviously me: \cite{Dompe:2011ys}
+
+
 \section{Long-Range Consequences}
-This work will provide a foundation for analysis of the factors involved on adapting the Linux kernel for his use on embedded systems dealing with multimedia software stacks.
+This work will contribute to the analysis of the factors involved on measuring and improving performance the Linux kernel for his use on embedded systems dealing with multimedia software stacks.
