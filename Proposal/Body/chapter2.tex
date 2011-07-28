@@ -4,27 +4,36 @@
 \section{General Objective}
 
 \begin{itemize}
-\item Measure and analyze the possible performance bottlenecks in the design of a general-propose \acl{OS} (specifically in Linux) in an embedded system for handling of multimedia data streams to propose changes in the algorithms and data structures to improve the performance for such data scenarios.
+\item Implement and analyze changes in the algorithms and data structures of the multimedia software stack GStreamer and Linux \acl{OS}, to improve performance and reduce penalties in embedded systems scenarios using the \ac{ARM} architecture.
 \end{itemize}
 
 \section{Specific Objectives}
 \begin{itemize*}
-\item To instrument and measure performance of the Linux kernel in an specific set of embedded systems specialized for multimedia data processing, using an specific set of multimedia processing scenarios.
-\item To design and execute experiments to identify the sources of performance bottlenecks in the selected scenarios.
-\item Document and characterize the results from the experiments for performance measurement.
-\item Propose algorithms or changes required to improve performance.
+\item To instrument and measure interactions and performance of the Linux kernel and GStreamer for a specific set of embedded systems, specialized for multimedia data processing, using an well-defined set of multimedia processing scenarios.
+\item Propose and implement algorithms or changes required to improve performance, aiming to generate reusable solutions that may be integrated on mainline projects.
 \end{itemize*}
 
 \section{Contributions to the subject}
-This work will provide documentation regarding the details of the specific tradeoffs for the implementation approaches of multimedia software on the target platforms, and could serve as basics for future work regarding improving performance (for example exploring improvements for power consumption reduction on the specific scenarios).
+\ac{LMWG} Christian Reis, stated that ``[multimedia is] one of the most complex and poorly-understood areas on Linux, stemming from the inherent challenges in providing high performance multimedia, IP restrictions on technology and content and the impressive rate at which new formats and capabilities have been developed to match increasing network and processing power'' \cite{Reis:vn}
+
+This work will provide information, tools and methodologies regarding the details of the specific tradeoffs for the implementation approaches of multimedia software on the target platforms, and could serve as basics for future work.
 
 \section{Scope and Limitations}
+Work will be done on the selected platform using the latest version of the software (Linux and GStreamer) available for them.
+
+This work will not cover the following subjects (these are subjects that can be explored in future work):
 \begin{itemize*}
-\item Work will be done specifically using the multimedia framework GStreamer on Linux embedded systems running on \acp{SoC} from Texas Instruments on two different architectures:
-	\begin{itemize*}
-	\item OMAP3x architecture: this \ac{SoC} has a \ac{DSP} co-processor to offload codec processing.
-	\item DM36x architecture: this \ac{SoC} has non-programable hardware accelerators to offload codec processing.
-	\end{itemize*}
-\item Implementations of the proposed algorithms and improvements will be made, but no guarantee that such changes will be merged back into mainstream open source projects is done. Still the work will be done interacting with the respective project maintainers with the idea of creating changes that can be merge on mainstream.
+\item Power consumption issues for the embedded platform.
+\item Real-time behavior for the multimedia stack.
 \end{itemize*}
- 
+
+\subsection{Hardware}
+Work will be done specifically using the multimedia framework GStreamer on Linux embedded systems running on \acp{SoC} from Texas Instruments on two different architectures:
+\begin{itemize*}
+\item DM36x architecture: this \ac{SoC} has non-programable hardware accelerators to offload codec processing.
+\item DM37x architecture: this \ac{SoC} has a \ac{DSP} co-processor to offload codec processing.
+\end{itemize*}
+
+These architectures has been selected due availability of cheap hardware (Beableboard-XM and Leopardboard), and the support of GStreamer for both. Both platforms provide access to the underlaying hardware acceleration of the platform using the CodecEngine software stack\cite{Preissig:2006fk}.
+
+The reason for using two different platforms is that they have different levels of processing power on the main processor, with the DM36x family sporting an ARMv5 core and the DM37x an ARMv7. We want to identify if there are notable differences caused by the specific ARM architecture being used.
