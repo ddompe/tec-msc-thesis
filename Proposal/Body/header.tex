@@ -32,7 +32,7 @@
 % Generate pretty PDF with links on the TOC
 \usepackage{mdwlist}
 \usepackage{alltt}
-\usepackage[dvips, bookmarks, colorlinks=false, pdftitle={\thesistitle}, pdfauthor={\pdfauthor}, pdfsubject={\thesistitle}, pdfkeywords={\thesiskeywords},
+\usepackage[dvips, bookmarks=true,linktoc=all, colorlinks=false, pdftitle={\thesistitle}, pdfauthor={\pdfauthor}, pdfsubject={\thesistitle}, pdfkeywords={\thesiskeywords},
 linkcolor=blue,filecolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
 
 % Allow epigraphs at the beginning of chapters
@@ -51,12 +51,15 @@ linkcolor=blue,filecolor=blue,urlcolor=blue,citecolor=blue]{hyperref}
 % Generation of acronyms
 \usepackage{acronym}
 
+% For color definitions
+\usepackage{color}
+
 % Comment this out when is not a draft
-\usepackage{draftwatermark}
-\SetWatermarkLightness{0.95}
-\SetWatermarkFontSize{5cm}
-\SetWatermarkScale{5}
-\SetWatermarkText{DRAFT}
+%\usepackage{draftwatermark}
+%\SetWatermarkLightness{0.95}
+%\SetWatermarkFontSize{5cm}
+%\SetWatermarkScale{5}
+%\SetWatermarkText{DRAFT}
 
 % Custom commands
 \newcommand{\HRule}{\rule{\linewidth}{0.5mm}}

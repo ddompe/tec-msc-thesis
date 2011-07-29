@@ -13,13 +13,15 @@
 \item Propose and implement algorithms or changes required to improve performance, aiming to generate reusable solutions that may be integrated on mainline projects.
 \end{itemize*}
 
-\section{Contributions to the subject}
+\section{Contributions}
 \ac{LMWG}'s Christian Reis, stated that ``[multimedia is] one of the most complex and poorly-understood areas on Linux, stemming from the inherent challenges in providing high performance multimedia, IP restrictions on technology and content and the impressive rate at which new formats and capabilities have been developed to match increasing network and processing power'' \cite{Reis:vn}
 
 This work will provide information, tools and methodologies regarding the details of the specific tradeoffs for the implementation approaches of multimedia software on the target platforms, and could serve as basics for future work.
 
+This work will also provide some high quality research in the subject of operating systems and hardware integration, hopefully laying a motivation for further research on this area. Research in embedded systems is key factor for this emerging industry in Costa Rica.
+
 \section{Scope and Limitations}
-Work will be done on the selected platforms using the latest version of the software (Linux and GStreamer) available for them.
+Work will be developed on the selected platforms using the latest version of the software (Linux and GStreamer) available for them.
 
 This work will not cover the following subjects (these are subjects that can be explored in future work):
 \begin{itemize*}
@@ -28,12 +30,12 @@ This work will not cover the following subjects (these are subjects that can be 
 \end{itemize*}
 
 \subsection{Hardware}
-Work will be done specifically using the multimedia framework GStreamer on Linux embedded systems running on \acp{SoC} from Texas Instruments on two different architectures:
+Work will be developed specifically using the multimedia framework GStreamer on Linux embedded systems running on \acp{SoC} from Texas Instruments on two different architectures:
 \begin{itemize*}
 \item DM36x architecture: this \ac{SoC} has non-programable hardware accelerators to offload codec processing.
 \item DM37x architecture: this \ac{SoC} has a \ac{DSP} co-processor to offload codec processing.
 \end{itemize*}
 
-These architectures have been selected due to the availability of cheap hardware (Beableboard-XM and Leopardboard), and the available support for GStreamer on both. Both platforms provide access to their underlaying hardware acceleration capabilities using the CodecEngine software stack\cite{Preissig:2006fk}.
+These architectures have been selected due to the availability of inexpensive hardware (Beableboard-XM and Leopardboard), and the available support for GStreamer on both. Both platforms provide access to their underlaying hardware acceleration capabilities using the CodecEngine software stack\cite{Preissig:2006fk}.
 
 The reason for using two different platforms is that they have different levels of processing power on their main processor, with the DM36x family sporting an ARMv5 core and the DM37x an ARMv7. We want to identify whether there are notable differences caused by the specific ARM architecture being used.
